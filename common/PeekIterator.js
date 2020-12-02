@@ -4,7 +4,7 @@ const CACHE_SIZE = 10
 
 class PeekIterator {
     constructor(it, endToken = null) {
-        this.id = it
+        this.it = it
         // 需要putBack的元素
         this.stackPutBacks = new LinkedList()
         // 基于时间窗口的缓存
@@ -17,10 +17,10 @@ class PeekIterator {
             return this.stackPutBacks.head
         }
         const val = this.next()
-        this.pubBack()
+        this.putBack()
         return val
     }
-    pubBack(){
+    putBack(){
         if(this.queueCache.length > 0){
             this.stackPutBacks.push(this.queueCache.pop())
         }
