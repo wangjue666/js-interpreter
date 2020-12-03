@@ -8,3 +8,6 @@ class LexicalException extends Error {
         return new LexicalException(`unexprected char ${c}`)
     }
 }
+
+
+module.exports = LexicalException
