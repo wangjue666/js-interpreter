@@ -3,7 +3,7 @@
 class AlphabetHelper {
     static ptnLetter = /^[a-zA-z]$/
     static ptnNumber = /^[0-9]$/
-    static pthLiteral = /^[_a-zA-Z0-9]$/
+    static ptnLiteral = /^[_a-zA-Z0-9]$/
     static ptnOperator = /^[+-\\*/><=!&|^%]$/
 
 
@@ -15,7 +15,7 @@ class AlphabetHelper {
         return AlphabetHelper.ptnNumber.test(c)
     }
 
-    static isLiteral(c) {
+    static isLiteral(c) {     
         return AlphabetHelper.ptnLiteral.test(c)
     }
 
