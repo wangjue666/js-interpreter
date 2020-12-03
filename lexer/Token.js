@@ -1,5 +1,17 @@
 const TokenType = require("./TokenType")
 
+//关键字
+const Keywords = new Set([
+    'var',
+    'if',
+    'else',
+    'for',
+    'break',
+    'while',
+    'func',
+    'return'
+])
+
 class Token {
     constructor(type, value) {
         this._type = type
