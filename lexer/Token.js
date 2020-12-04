@@ -1,5 +1,6 @@
 const TokenType = require("./TokenType")
 const AlphabetHelper = require('./AlphabetHelper')
+const LexicalException = require("./LexicalException")
 //关键字
 const Keywords = new Set([
     'var',
@@ -60,6 +61,42 @@ class Token {
             return new Token(TokenType.BOOLEAN, s)
         }
         return new Token(TokenType.VARIABLE, s)
+    }
+
+    static makeString(it){
+        let s = ""
+        let state = 0 
+        
+        while(it.hasNext()){
+            let c = it.next()
+
+            switch(state){
+                case 0:
+                    if(c === '"'){
+                        state = 1
+                    }else{
+                        state = 2
+                    }
+                    s+=c
+                    break;
+                case 1:
+                    if(c === '"'){
+                        return new Token(TokenType.STRING, s+c)
+                    }else{
+                        s+=c
+                    }    
+                    break;
+                case 2:
+                    if(c==="'"){
+                        return new Token(TokenType.STRING, s+c)
+                    }else{
+                        s+=c
+                    }    
+                    break;
+            }
+        }
+
+        throw new LexicalException('Unexpected error')
     }
 }
 
