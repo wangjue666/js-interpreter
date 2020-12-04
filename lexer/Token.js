@@ -24,6 +24,9 @@ class Token {
     getValue(){
         return this._value
     }
+    isValue() {
+      return this.isScalar() || this.isVariable()
+    }
     //是否是变量
     isVariable() {
         return this._type === TokenType.VARIABLE
