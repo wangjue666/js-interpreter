@@ -54,4 +54,25 @@ describe('Token', () => {
       assertToken(token, expected, TokenType.OPERATOR)
     }
   })
+
+  it('makeNumber', () => {
+    const tests = [
+      '+0 aa',
+      '-0 bbb',
+      '.3 ccc',
+      '.5555 ddd',
+      '7899.999 aaa',
+      '-100 ggg',
+      '-1000.5345345*123123',
+      '012 aaa'
+    ]
+
+    for (let test of tests) {
+      const it = new PeekIterator(arrayToGenerator([...test]))
+      const token = Token.makeNumber(it)
+      const [expected] = test.split(/[ *]/)  //按空格乘号进行切割
+      const type = test.indexOf('.') == -1 ? TokenType.INTEGER : TokenType.FLOAT
+      assertToken(token, expected, type)
+    }
+  })
 })

@@ -253,6 +253,85 @@ class Token {
         } // end while loop
     
         throw new LexicalException('Unexpected error')
+    }
+
+    static makeNumber(it) {
+        let state = 0
+        let s = ''
+    
+        while (it.hasNext()) {
+          let lookahead = it.peek()
+    
+          switch (state) {
+            case 0:
+              if (lookahead == '0') {
+                state = 1
+              } else if (AlphabetHelper.isNumber(lookahead)) {
+                state = 2
+              } else if (lookahead == '+' || lookahead == '-') {
+                state = 3
+              } else if (lookahead == '.') {
+                state = 5
+              }
+              break
+            case 1:
+              if (lookahead == '0') {
+                state = 1
+              } else if (lookahead == '.') {
+                state = 4
+              } else if (AlphabetHelper.isNumber(lookahead)) {
+                state = 2
+              } else {
+                return new Token(TokenType.INTEGER, s)
+              }
+              break
+            case 2:
+              if (AlphabetHelper.isNumber(lookahead)) {
+                state = 2
+              } else if (lookahead == '.') {
+                state = 4
+              } else {
+                return new Token(TokenType.INTEGER, s)
+              }
+              break
+            case 3:
+              if (AlphabetHelper.isNumber(lookahead)) {
+                state = 2
+              } else if (lookahead == '.') {
+                state = 5
+              } else {
+                throw LexicalException.fromChar(lookahead)
+              }
+              break
+            case 4:
+              if (lookahead == '.') {
+                throw LexicalException.fromChar(lookahead)
+              } else if (AlphabetHelper.isNumber(lookahead)) {
+                state = 20
+              } else {
+                return new Token(TokenType.FLOAT, s)
+              }
+              break
+            case 5:
+              if (AlphabetHelper.isNumber(lookahead)) {
+                state = 20
+              } else {
+                throw LexicalException.fromChar(lookahead)
+              }
+              break
+            case 20:
+              if (AlphabetHelper.isNumber(lookahead)) {
+                state = 20
+              } else if (lookahead == '.') {
+                throw LexicalException.fromChar(lookahead)
+              } else {
+                return new Token(TokenType.FLOAT, s)
+              }
+          }
+          s += lookahead
+          it.next()
+        } // end while loop
+        throw new LexicalException('Unexpected error')
       }
 }
 
