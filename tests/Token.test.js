@@ -33,4 +33,25 @@ describe('Token', () => {
       assertToken(token, test, TokenType.STRING)
     }
   })
+
+  it('makeOp', () => {
+    const tests = [
+      ['+ xxx', '+'],
+      ['++mmm', '++'],
+      ['/=g', '/='],
+      ['==1', '=='],
+      ['&=3982', '&='],
+      ['&777', '&'],
+      ['||xx', '||'],
+      ['^=111', '^='],
+      ['%7', '%']
+    ]
+
+    for (let test of tests) {
+      const [input, expected] = test
+      const it = new PeekIterator(arrayToGenerator([...input]))
+      const token = Token.makeOp(it)
+      assertToken(token, expected, TokenType.OPERATOR)
+    }
+  })
 })
