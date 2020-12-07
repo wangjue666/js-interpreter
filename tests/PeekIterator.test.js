@@ -15,6 +15,15 @@ describe('test PeekIterator', () => {
         assert.equal(it.next(), 'd')
     })
 
+    it('test_putBack', () => {
+        const it = new PeekIterator(arrayToGenerator([...'1+2']))
+        assert.equal(it.next(), '1')
+        assert.equal(it.next(), '+')
+        assert.equal(it.peek(), '2')
+        it.putBack()
+        assert.equal(it.peek(), '+')
+        assert.equal(it.next(), '+')
+    })
     it('test_lookahead2', () => {
         const it = new PeekIterator(arrayToGenerator([...'abcdefg']))
         assert.equal(it.next(), 'a')
