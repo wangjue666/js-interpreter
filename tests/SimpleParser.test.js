@@ -27,6 +27,6 @@ describe("SimpleParser Test", () => {
       const v4 = e3.getChild(1);
       assert.equal(v3.lexeme.getValue(), "3");
       assert.equal(v4.lexeme.getValue(), "4");
-  
+      expr.print(2);
     })
   })
