@@ -1,59 +1,61 @@
+const LinkedList = require("linkedlist");
+const CACHE_SIZE = 10;
 
-//使用链表来当栈数据结构
-const LinkedList = require('linkedlist')
+//公共工具类，将一个迭代器转化为能够peek、回退的迭代器——流
+class PeekIterator{
+    constructor(it, endToken = null){
+        this.it = it;
+        //存放需要putBack 的元素
+        this.stackPutBacks = new LinkedList();
 
-const CACHE_SIZE = 10
-
-class PeekIterator {
-    constructor(it, endToken = null) {
-        this.it = it
-        // 需要putBack的元素
-        this.stackPutBacks = new LinkedList()
-        // 基于时间窗口的缓存 保存已处理的节点
-        this.queueCache = new LinkedList()
-        this.endToken = endToken
+        //基于时间窗口的缓存
+        this.queueCache = new LinkedList();
+        //流的结束标志-可选
+        this.endToken = endToken;
     }
-    // 提前瞅下 下一个要处理的节点
     peek(){
         if(this.stackPutBacks.length > 0){
-            return this.stackPutBacks.head
+            return this.stackPutBacks.tail;
         }
-        // 取出迭代对象下个节点 
-        const val = this.next()
-        this.putBack()
-        return val
+        const val = this.next();
+        this.putBack();
+        return val;
     }
-    // 从时间窗口拿出最后一个节点执行压栈操作 相当于上一个处理过的节点 再给它放回去
     putBack(){
         if(this.queueCache.length > 0){
-            this.stackPutBacks.push(this.queueCache.pop())
+            this.stackPutBacks.push(this.queueCache.pop());
         }
+    }
+    next(){
+        let val = null;
+
+        //根据回退栈中是否有元素来判断从哪获取当前元素
+        if(this.stackPutBacks.length > 0){
+            val = this.stackPutBacks.pop();
+        }else{
+            val = this.it.next().value;
+            if(val === undefined){
+                //如果迭代器已空
+                val = this.endToken;
+                this.endToken = null;
+            }
+            
+        }
+
+
+        //如果窗口缓存已满，则移除最旧的值
+        while(this.queueCache.length > CACHE_SIZE - 1){
+            this.queueCache.shift();
+        }
+        this.queueCache.push(val);
+        return val;
     }
 
+
     hasNext(){
-        return this.endToken || Boolean(this.peek())
-    }
-    // 将栈的首结点返回出去,
-    next(){
-        let val = null
-        if(this.stackPutBacks.length > 0){
-            val = this.stackPutBacks.pop()
-        }else{
-            val = this.it.next().value
-            if(val === undefined){
-                const tmp = this.endToken
-                this.endToken = null
-                return tmp
-            }
-        }
-        // 处理缓存
-        while(this.queueCache.length >=  CACHE_SIZE){
-            this.queueCache.shift()
-        }
-        //每处理完一个节点 塞到时间窗口去
-        this.queueCache.push(val)
-        return val
+        //endToken也是流的一部分，它存在则流未尽
+        return this.endToken || !!this.peek();
     }
 }
 
-module.exports = PeekIterator
+module.exports = PeekIterator;
