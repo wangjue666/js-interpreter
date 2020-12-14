@@ -1,26 +1,26 @@
-const PeekIterator = require('../../common/PeekIterator');
-const ParseException = require('../util/ParseException');
+const PeekIterator = require('../../common/PeekIterator')
+const ParseException = require('./ParseException')
 
-class PeekTokenIterator extends PeekIterator {
-  constructor(it) {
-    super(it);
-  }
+class PeekTokenIterator extends PeekIterator{
+    constructor(it) {
+        super(it)
+    }
 
-  nextMatch(value) {
-    let token = this.next();
-    if (token.getValue() !== value) {
-      throw ParseException.fromToken(token);
+    nextMatch(value) {
+        const token = this.next()
+        if(token.getValue() !== value) {
+            throw ParseException.fromToken(token)
+        }
+        return token
     }
-    return token;
-  }
-  //重载nextMatch
-  nextMatch1(type) {
-    let token = this.next();
-    if (token.getType() !== type) {
-      throw ParseException.fromToken(token);
+
+    nextMatch1(type) {
+        const token = this.next()
+        if(token.getType() !== type) {
+            throw ParseException.fromToken(token)
+        }
+        return token
     }
-    return token;
-  }
 }
 
-module.exports = PeekTokenIterator;
+module.exports = PeekTokenIterator

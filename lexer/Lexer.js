@@ -4,6 +4,7 @@ const TokenType = require("./TokenType");
 const AlphabetHelper = require("./AlphabetHelper");
 const LexicalException = require("./LexicalException");
 const arrayToGenerator = require("../common/arrayToGenerator");
+const fs = require("fs");
 class Lexer {
   analyse(source) {
     const tokens = [];
@@ -85,6 +86,12 @@ class Lexer {
       throw LexicalException.fromChar(c);
     }
     return tokens;
+  }
+
+  static fromFile(src) {
+    const content = fs.readFileSync(src, "utf-8")
+    const lexer = new Lexer()
+    return arrayToGenerator(lexer.analyse(arrayToGenerator(content)))
   }
 }
 

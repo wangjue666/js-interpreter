@@ -1,20 +1,26 @@
-const ASTNode = require('./ASTNode');
-const TokenType = require('../../lexer/TokenType');
-const ASTNodeType =require("./ASTNodeTypes")
+const TokenType = require("../../lexer/TokenType");
+const ASTNode = require('./ASTNode')
 class Factor extends ASTNode {
-  constructor(parent, it) {
-    super(parent)
-    const token = it.next()
-    var type = token.getType()
-    if(type === TokenType.VARIABLE){
-      this.type = ASTNodeType.VARIABLE
-    }else{
-      this.type = ASTNodeType.SCALAR
-    }
-
-    this.label = token.getValue()
-    this.lexeme = token
+  constructor(token) {
+    super();
+    this.lexeme = token;
+    this.label = token.getValue();
   }
 }
-
 module.exports = Factor;
+
+const { Variable, Scalar} = require("./index");
+Factor.parse = it => {
+  const token = it.peek();
+  const type = token.getType();
+
+  if (type == TokenType.VARIABLE) {
+    it.next();
+    return new Variable(token);
+  } else if (token.isScalar()) {
+    it.next();
+    return new Scalar(token);
+  }
+  return null;
+};
+

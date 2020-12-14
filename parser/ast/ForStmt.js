@@ -1,10 +1,10 @@
-const Stmt = require("./Stmt.js");
-const ASTNodeType = require("./ASTNodeType");
-
-class ForStmt extends Stmt {  //for 语句
-  constructor(parent) {
-    super(parent, ASTNodeType.FOR_STMT, "for");
-  }
+const Stmt = require('./Stmt')
+const ASTNodeTypes = require('./ASTNodeTypes')
+class ForStmt extends Stmt {
+    constructor() {
+        super(ASTNodeTypes.FOR_STMT, 'for')
+    }
 }
 
-module.exports = ForStmt;
+
+module.exports = ForStmt 
