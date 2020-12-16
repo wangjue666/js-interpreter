@@ -63,6 +63,7 @@ class Token {
     return `type ${this._type.type}, value ${this._value}`;
   }
 
+ 
   static makeVarOrKeyword(it) {
     let s = "";
 
